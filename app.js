@@ -1,22 +1,24 @@
-const Koa=require('koa');
-const app=new Koa();
-const Router=require('koa-router');
-const router=new Router();
-const cors=require('koa2-cors');
-const koaBody=require('koa-body');
-const ENV='test-4a705';
+const Koa = require('koa')
+const app = new Koa()
+const Router = require('koa-router')
+const router = new Router()
+const cors = require('koa2-cors')
+const koaBody = require('koa-body')
 
-//cors方案允许指定的前端端口向后端发送请求
+const ENV = 'test-4a705'
+
+// 安装koa2-cors插件实现跨域
 app.use(cors({
-    origin:['http://localhost:9528'],
-    credentials:true
+    origin: ['http://localhost:9528'],
+    credentials: true
 }))
 
-//更新功能:接收post请求参数的解析
+// 接收post参数解析，post信息在body中所以需要使用koa-body
 app.use(koaBody({
-   multipart:true
+    multipart: true,
 }))
 
+//定义全局ENV的值
 app.use(async (ctx, next)=>{
     console.log('全局中间件')
     // ctx.body = 'Hello Wolrd'
@@ -24,14 +26,18 @@ app.use(async (ctx, next)=>{
     await next()
 })
 
-//获取playlist.js中的路由名称，并且定义路由的名字为playlist
-const playlist=require('./controller/playlist.js');
-router.use('/playlist',playlist.routes());
-
-app.use(router.routes());
-app.use(router.allowedMethods());
+const playlist = require('./controller/playlist.js')
 
 
-app.listen(3000,()=>{
-    console.log('3000端口的服务正在启动');
-});
+router.use('/playlist', playlist.routes())
+
+
+app.use(router.routes())
+app.use(router.allowedMethods())
+
+
+
+app.listen(3000, ()=>{
+    console.log('服务开启在3000端口')
+})
+

@@ -1,8 +1,7 @@
 const getAccessToken = require('./getAccessToken.js')
 const rp = require('request-promise')
-
 //向云数据库直接发送请求
-const callCloudDB = async (ctx, fnName, query = {}) => {
+const callCloudDB = async(ctx, fnName, query = {}) => {
     const ACCESS_TOKEN = await getAccessToken()
     const options = {
         method: 'POST',
