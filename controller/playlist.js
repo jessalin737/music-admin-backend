@@ -36,7 +36,7 @@ router.post('/updatePlaylist', async(ctx, next)=>{
             data: {
                 name: '${params.name}',
                 copywriter: '${params.copywriter}'
-            }
+            }  
         })
     `
     const res = await callCloudDB(ctx, 'databaseupdate', query)
