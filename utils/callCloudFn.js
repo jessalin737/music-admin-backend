@@ -18,6 +18,7 @@ const callCloudFn = async (ctx, fnName, params) => {
             return res
         })
         .catch(function (err) {
+            console.log(err)
         })
 }
 

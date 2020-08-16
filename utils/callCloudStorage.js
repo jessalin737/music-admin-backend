@@ -3,7 +3,10 @@ const rp=require('request-promise');
 const fs=require('fs');
 const { param } = require('../controller/swiper.js');
 
+
+//云存储操作
 const cloudStorage={
+    //获取文件下载链接
     async download(ctx,fileList){
         const ACCESS_TOKEN=await getAccessToken();
         const options={
@@ -23,6 +26,7 @@ const cloudStorage={
         })
 
       },
+    //获取文件上传链接
     async upload(ctx){
         const ACCESS_TOKEN=await getAccessToken();
         //1.请求地址
@@ -52,7 +56,7 @@ const cloudStorage={
                 'content-type':'multipart/form-data'
             },
             uri:info.url,
-            formaData:{
+            formData:{
                key:path,
                Signature:info.authorization,
                'x-cos-security-token':info.token,
@@ -64,6 +68,25 @@ const cloudStorage={
         }
         await rp(params)
         return info.file_id
+
+    },
+    //删除文件
+    async delete(ctx,fileid_list){
+        const ACCESS_TOKEN=await getAccessToken();
+        const options={
+           method:'POST',
+           uri:'https://api.weixin.qq.com/tcb/batchdeletefile?access_token=${ACCESS_TOKEN}',
+           body:{
+               env:ctx.state.env,
+               fileid_list:fileid_list
+           },
+           json:true
+        }
+        await rp(options).then((res)=>{
+            return res
+        }).catch((err)=>{
+            console.log(err)
+        })
 
     }
 
